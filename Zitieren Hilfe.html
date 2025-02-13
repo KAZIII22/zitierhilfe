@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zitierhilfe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #ffabed;
+        }
+        h1 {
+            color: #333;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #5a3c2e;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Zitierhilfe</h1>
+    <p>Gib ein Stichwort ein, um eine Zitierweise zu finden <3 :</p>
+
+    <input type="text" id="search" placeholder="Suchbegriff eingeben...">
+    <button onclick="searchCitation()">Suchen</button>
+
+    <div id="results"></div>
+
+    <script>
+        // Zitiermöglichkeiten - Hier kannst du deine eigenen hinzufügen
+        const citations = [
+            { keyword: "Buch/Monographie im Text", citation: "Nachname & Nachname, Erscheinungsjahr. S.xxx (ab 3 Autor*innen Nachname et al.)" },
+            { keyword: "Buch/Monographie Literaturverzeichnis", citation: "Nachname, Vorname & Nachname, Vorname Erscheinungsjahr. Titel: Untertitel (Auflage). Verlag. DOI/URL" },
+            { keyword: "Sammelband im Text", citation: "Nachname & Nachname. Erscheinungsjahr. S.xxx" },
+            { keyword: "Sammelband im Literaturverzeichnis", citation: "Nachname, Vorname & Nachname, Vorname (Erscheinungsjahr). Titel: Untertitel. In Herausgeber*innen (Hrsg.). Sammelwerkstitel: Sammelwerksuntertitel (Auflage, S.xxx)." },
+            { keyword: "Website im Text", citation: "(Nachname, Erscheinungsjahr)" },
+            { keyword: "Website im Literaturverzeichnis", citation: "Nachname, Vorname (Erscheinungsjahr). Titel: Untertitel. Name der Website. URL" }
+        ];
+
+        function searchCitation() {
+            let input = document.getElementById('search').value.toLowerCase().trim();
+            let resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = "";
+
+            let matches = citations.filter(c => c.keyword.toLowerCase().includes(input));
+
+            if (matches.length > 0 && input.length > 0) {
+                matches.forEach(match => {
+                    let resultDiv = document.createElement('div');
+                    resultDiv.classList.add('result');
+                    resultDiv.innerHTML = `<strong>${match.keyword}:</strong> ${match.citation}`;
+                    resultDiv.style.display = "block"; // Damit das Ergebnis angezeigt wird
+                    resultsDiv.appendChild(resultDiv);
+                });
+            } else {
+                resultsDiv.innerHTML = "<p>Keine passenden Zitierweisen gefunden.</p>";
+            }
+        }
+
+        // Event Listener für Enter-Taste hinzufügen
+        document.getElementById('search').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                searchCitation();
+            }
+        });
+    </script>
+
+</body>
+</html>
